@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: c69289bb37db65e42849ad828b15e37f
+timeCreated: 1446195045
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - turret: {instanceID: 0}
+  - lightningChain: {fileID: 161594, guid: 9994990a9cf6a0e40b8d5da4c8219208, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
