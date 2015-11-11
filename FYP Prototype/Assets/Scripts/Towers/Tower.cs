@@ -10,6 +10,9 @@ public class Tower : MonoBehaviour {
     protected Unit target = null;
     protected Unit unit;
 
+    public bool isDamaging = true;
+    protected float attackTimer;
+
     void Awake ()
     {
         unit = GetComponent<Unit>();
@@ -30,10 +33,11 @@ public class Tower : MonoBehaviour {
             RotateTurret();
         }
 
-        if (unit == null)
-            Debug.Log("No unit");
-
-        unit.Attack();
+        if (isDamaging)
+        {
+            attackTimer += Time.deltaTime;
+            //unit.Attack();
+        }
     }
 
     void OnTriggerEnter (Collider col)
@@ -52,6 +56,12 @@ public class Tower : MonoBehaviour {
         {
             target = null;
         }
+    }
+
+    // Replacing unit Attack since it broke
+    void TowerAttack()
+    {
+
     }
 
     void FindTarget (Collider col)

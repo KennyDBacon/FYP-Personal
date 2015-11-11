@@ -5,8 +5,6 @@ public class FireTower : Tower {
 
     public GameObject fireParticle;
 
-    public float attackTimer;
-
     void Start()
     {
         isRotating = true;
@@ -19,10 +17,9 @@ public class FireTower : Tower {
 
             fireParticle.GetComponent<ParticleSystem>().Play();
 
-            attackTimer -= Time.deltaTime;
-            if(attackTimer <= 0)
+            if(attackTimer >= unit.attackInterval)
             {
-                attackTimer = 0.6f;
+                attackTimer = 0;
                 foreach(Unit enemy in fireParticle.GetComponent<Flamethrower>().GetEnemyList)
                 {
                     enemy.health -= unit.damage;

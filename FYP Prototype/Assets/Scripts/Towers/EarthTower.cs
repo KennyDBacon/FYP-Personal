@@ -10,7 +10,7 @@ public class EarthTower : Tower {
 
     private Transform rotaryCenter;
 
-    private float attackTimer;
+    //private float attackTimer;
     private float stoneTimer = 0;
     private float stoneMaxSize = 0.2f;
 
