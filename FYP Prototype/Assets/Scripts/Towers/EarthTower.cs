@@ -14,7 +14,23 @@ public class EarthTower : Tower {
     private float stoneTimer = 0;
     private float stoneMaxSize = 0.2f;
 
+    private bool isInitiated = false;
+
+    private Vector3 scaleTo;
+
 	void Start () {
+        if (!isInitiated)
+            SetupTower();
+    }
+
+    //void Awake()
+    //{
+    //    if (!isInitiated)
+    //        SetupTower();
+    //}
+
+    void SetupTower()
+    {
         bunchOfFloatingStones = new List<GameObject>();
         rotaryCenter = transform.FindChild("Center");
 
@@ -36,16 +52,22 @@ public class EarthTower : Tower {
         }
 
         rotaryCenter.transform.rotation = Quaternion.Euler(Random.Range(-45, 45), Random.Range(-45, 45), Random.Range(-45, 45));
-	}
-	
-	void Update () {
+
+        isInitiated = true;
+    }
+
+    void Update () {
+
         rotaryCenter.Rotate(new Vector3(0, 45 * Time.deltaTime, 0));
 
         foreach(GameObject stone in bunchOfFloatingStones)
         {
             if(stone.transform.localScale.x < stoneMaxSize)
             {
-                stone.transform.localScale += new Vector3(Time.deltaTime / 4, Time.deltaTime / 4, Time.deltaTime / 4);
+                scaleTo.x = Time.deltaTime / 4;
+                scaleTo.y = Time.deltaTime / 4;
+                scaleTo.z = Time.deltaTime / 4;
+                stone.transform.localScale += scaleTo;
                 stone.transform.Rotate(new Vector3(Time.deltaTime * 300, 0, 0));
             }
         }
@@ -64,7 +86,7 @@ public class EarthTower : Tower {
     void FireAtTarget()
     {
         int index = Random.Range(0, bunchOfFloatingStones.Count);
-        bunchOfFloatingStones[index].transform.localScale = new Vector3(0, 0, 0);
+        bunchOfFloatingStones[index].transform.localScale = Vector3.zero;
         GameObject flyingStone = Instantiate(unit.projectile, bunchOfFloatingStones[index].transform.position, Quaternion.identity) as GameObject;
         flyingStone.transform.rotation = bunchOfFloatingStones[index].transform.rotation;
         flyingStone.GetComponent<TowerProjectile>().target = target;

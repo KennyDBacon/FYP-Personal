@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class TowerBuilding : MonoBehaviour {
-
+    
     private bool isBuildable = true;
     private Color originalMat;
     private Color transparentMat;
@@ -10,7 +10,7 @@ public class TowerBuilding : MonoBehaviour {
     void Start()
     {
         originalMat = gameObject.GetComponent<MeshRenderer>().materials[0].color;
-        transparentMat = new Color(originalMat.r, originalMat.g, originalMat.b, 0.5f);
+        transparentMat = new Color(255, 0, 0, 0.5f);
     }
 
     void Update()
