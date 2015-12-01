@@ -12,8 +12,6 @@ public class CameraControl : MonoBehaviour
     private Vector3 moveToPos;
     private float maxDeviation = (50 - 15) * (-3.0f/6.0f) + 25;
 
-    public GameObject TowerTest;
-
     void Start()
     {
         playerCam = Camera.main.gameObject;

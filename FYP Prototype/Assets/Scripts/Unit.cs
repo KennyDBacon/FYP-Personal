@@ -7,11 +7,11 @@ public class Unit : MonoBehaviour
     public bool isAllyTeam;
     public int health;
     public int damage;
-    public float attackInterval;
     public Unit target = null;
 
-    //Alpha (Removing later)
-    private float attackTimer = 0.0f;
+    //Alpha (Removing later. Moving to towerclass)
+    public float attackInterval;
+    protected float attackTimer = 0.0f;
 
     //Ranged units
     public GameObject projectile = null;
@@ -22,12 +22,12 @@ public class Unit : MonoBehaviour
         attackTimer = attackInterval;
     }
 
-    void Update ()
+    protected virtual void Update ()
     {
         attackTimer += Time.deltaTime;
     }
 
-    public void Attack ()
+    protected void Attack()
     {
         if (attackTimer >= attackInterval)
         {
@@ -43,10 +43,9 @@ public class Unit : MonoBehaviour
         }
     }
 
-    private void MeleeAttack()
+    protected virtual void MeleeAttack()
     {
-        target.health -= damage;
-        target.AliveCheck();
+        Damage();
     }
 
     private void RangedAttack()
@@ -54,12 +53,12 @@ public class Unit : MonoBehaviour
         if (projectile != null)
         {
             GameObject towerProjectile = Instantiate(projectile, projectileSpawnPoint.position, Quaternion.identity) as GameObject;
-            towerProjectile.GetComponent<TowerProjectile>().target = target;
-            towerProjectile.GetComponent<TowerProjectile>().damage = damage;
+            towerProjectile.GetComponent<Unit>().target = target;
+            towerProjectile.GetComponent<Unit>().damage = damage;
         }
     }
 
-    public void AliveCheck()
+    public virtual void AliveCheck()
     {
         if (health <= 0)
         {
@@ -72,5 +71,11 @@ public class Unit : MonoBehaviour
                 Destroy(gameObject);
             }
         }
+    }
+
+    protected virtual void Damage()
+    {
+        target.health -= damage;
+        target.AliveCheck();
     }
 }

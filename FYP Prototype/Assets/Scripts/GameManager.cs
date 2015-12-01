@@ -4,12 +4,12 @@ using System.Collections;
 public class GameManager : MonoBehaviour
 {
 
-    public static GameObject endPoint;
-    public static GameObject player;
+    public static Unit endPoint;
+    public static Unit player;
 
 	void Awake ()
     {
-        endPoint = GameObject.FindGameObjectWithTag("EndPoint");
-        player = GameObject.FindGameObjectWithTag("Player");
+        endPoint = GameObject.FindGameObjectWithTag("EndPoint").GetComponent<Unit>();
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Unit>();
 	}
 }

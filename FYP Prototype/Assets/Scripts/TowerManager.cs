@@ -24,6 +24,19 @@ public class TowerManager : MonoBehaviour {
 	void Update () {
 	    if(playerCam.UpperCam.activeSelf)
         {
+            Ray ray = upperCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (hit.collider.tag == "Building")
+                {
+                    if (hit.collider.GetComponent<BoxCollider>() != null)
+                    {
+                        Debug.Log("Test");
+                    }
+                }
+            }
+
             if (Input.GetKeyDown(KeyCode.B))
             {
                 isBuildMode = !isBuildMode;
@@ -65,8 +78,8 @@ public class TowerManager : MonoBehaviour {
                 }
                 ///////////////////////////
 
-                Ray ray = upperCamera.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
+                ray = upperCamera.ScreenPointToRay(Input.mousePosition);
+                //RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
                 {
                     ghostTowerPos.x = Mathf.Round(hit.point.x);
@@ -83,10 +96,12 @@ public class TowerManager : MonoBehaviour {
                         GameObject newTower = Instantiate(towers[towerIndex], ghostTower.transform.position, Quaternion.identity) as GameObject;
                         newTower.GetComponent<BoxCollider>().isTrigger = false;
                         newTower.GetComponent<NavMeshObstacle>().enabled = true;
-                        newTower.GetComponent<SphereCollider>().enabled = true;
                         newTower.GetComponent<Unit>().enabled = true;
-                        newTower.GetComponent<BoxCollider>().size = new Vector3(1, 1, 1);
+                        newTower.GetComponent<BoxCollider>().size =Vector3.one;
                         Destroy(newTower.GetComponent<TowerBuilding>());
+
+                        if (newTower.GetComponent<SphereCollider>() != null)
+                            newTower.GetComponent<SphereCollider>().enabled = true;
 
                         switch(towerIndex)
                         {
@@ -98,6 +113,8 @@ public class TowerManager : MonoBehaviour {
                                 break;
                             case 3: newTower.GetComponent<EarthTower>().enabled = true;
                                 break;
+                            //case 4: newTower.GetComponent <LightningTower>().enabled = true;
+                                //break;
                         }
                     }
                 }
