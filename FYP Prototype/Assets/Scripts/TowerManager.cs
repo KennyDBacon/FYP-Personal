@@ -16,6 +16,10 @@ public class TowerManager : MonoBehaviour {
     private int towerIndex = 0;
     private bool isNext = false;
 
+    private bool onUpMenu = false;
+    private Vector3 uiPos;
+    private Transform selectedTower;
+
 	void Start () {
         //playerCam = GameObject.FindGameObjectWithTag("Player").GetComponent<CameraControl>();
         //upperCamera = GameObject.FindGameObjectWithTag("SubCamera").GetComponent<Camera>();
@@ -24,17 +28,27 @@ public class TowerManager : MonoBehaviour {
 	void Update () {
 	    if(playerCam.UpperCam.activeSelf)
         {
-            Ray ray = upperCamera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
+            if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                if (hit.collider.tag == "Building")
+                Ray ray = upperCamera.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit))
                 {
-                    if (hit.collider.GetComponent<BoxCollider>() != null)
+                    if (hit.collider.tag == "Tower")
                     {
-                        Debug.Log("Test");
+                        if (hit.collider.GetComponent<BoxCollider>() != null)
+                        {
+                            onUpMenu = true;
+                            selectedTower = hit.transform;
+                        }
                     }
                 }
+            }
+
+            if (onUpMenu)
+            {
+                uiPos = upperCamera.WorldToScreenPoint(selectedTower.position);
+                Debug.Log(uiPos);
             }
 
             if (Input.GetKeyDown(KeyCode.B))
@@ -78,8 +92,8 @@ public class TowerManager : MonoBehaviour {
                 }
                 ///////////////////////////
 
-                ray = upperCamera.ScreenPointToRay(Input.mousePosition);
-                //RaycastHit hit;
+                Ray ray = upperCamera.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
                 {
                     ghostTowerPos.x = Mathf.Round(hit.point.x);
@@ -129,4 +143,12 @@ public class TowerManager : MonoBehaviour {
             }
         }
 	}
+
+    void OnGUI()
+    {
+        if (onUpMenu)
+        {
+            GUI.Button(new Rect(uiPos.x, uiPos.y, 100, 40), "Test");
+        }
+    }
 }
