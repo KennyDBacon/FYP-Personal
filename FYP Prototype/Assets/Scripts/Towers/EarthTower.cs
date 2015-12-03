@@ -19,6 +19,8 @@ public class EarthTower : Tower {
     private Vector3 scaleTo;
 
 	void Start () {
+        isUpgradable = true;
+
         if (!isInitiated)
             SetupTower();
     }

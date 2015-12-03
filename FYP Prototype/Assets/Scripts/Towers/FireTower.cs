@@ -8,6 +8,7 @@ public class FireTower : Tower {
     void Start()
     {
         isRotating = true;
+        isUpgradable = true;
     }
 
 	void Update () {

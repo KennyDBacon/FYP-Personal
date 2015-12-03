@@ -7,6 +7,11 @@ public class LightningTower : Tower {
 
     public float attackTimer;
 
+    void Start()
+    {
+        isUpgradable = true;
+    }
+
     void Update () {
         if (target != null)
         {

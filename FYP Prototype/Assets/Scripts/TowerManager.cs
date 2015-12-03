@@ -48,7 +48,6 @@ public class TowerManager : MonoBehaviour {
             if (onUpMenu)
             {
                 uiPos = upperCamera.WorldToScreenPoint(selectedTower.position);
-                Debug.Log(uiPos);
             }
 
             if (Input.GetKeyDown(KeyCode.B))
@@ -148,7 +147,21 @@ public class TowerManager : MonoBehaviour {
     {
         if (onUpMenu)
         {
-            GUI.Button(new Rect(uiPos.x, uiPos.y, 100, 40), "Test");
+            if (selectedTower.GetComponent<Tower>().isReplacable)
+            {
+                if (GUI.Button(new Rect(uiPos.x + 10, Screen.height - uiPos.y - 90, 100, 40), "Fire"))
+                {
+                    Debug.Log("Upgrade to Fire Tower");
+                }
+
+                GUI.Button(new Rect(uiPos.x + 10, Screen.height - uiPos.y - 45, 100, 40), "Water");
+                GUI.Button(new Rect(uiPos.x + 10, Screen.height - uiPos.y, 100, 40), "Earth");
+                GUI.Button(new Rect(uiPos.x + 10, Screen.height - uiPos.y + 45, 100, 40), "Lightning");
+            }
+            else if (selectedTower.GetComponent<Tower>().isUpgradable)
+            {
+                GUI.Button(new Rect(uiPos.x + 10, Screen.height - uiPos.y - 20, 100, 40), "Upgrade");
+            }
         }
     }
 }

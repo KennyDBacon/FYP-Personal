@@ -2,7 +2,12 @@
 using System.Collections;
 
 public class BasicTower : Tower {
-    
+
+    void Start()
+    {
+        isReplacable = true;
+    }
+
     void Update()
     {
         if (target != null)

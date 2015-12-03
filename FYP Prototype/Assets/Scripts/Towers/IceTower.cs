@@ -9,6 +9,7 @@ public class IceTower : Tower {
     {
         isRotating = true;
         isDamaging = false;
+        isUpgradable = true;
     }
     
     void Update () {
