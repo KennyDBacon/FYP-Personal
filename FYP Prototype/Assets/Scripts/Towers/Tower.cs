@@ -16,6 +16,8 @@ public class Tower : MonoBehaviour {
     void Awake ()
     {
         unit = GetComponent<Unit>();
+
+        attackTimer = unit.attackInterval;
     }
 
 	void Update () 
@@ -30,12 +32,18 @@ public class Tower : MonoBehaviour {
     {
         if(isRotating && turret != null)
         {
-            RotateTurret();
+            //RotateTurret();
+            turret.LookAt(target.gameObject.transform);
         }
 
         if (isDamaging)
         {
             attackTimer += Time.deltaTime;
+
+            if (attackTimer >= unit.attackInterval)
+            {
+                //unit.projectile.GetComponent<TowerProjectile>().damage = unit.damage;
+            }
             //unit.Attack();
         }
     }
