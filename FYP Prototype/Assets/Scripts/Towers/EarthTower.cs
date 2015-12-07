@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class EarthTower : Tower {
 
-    public GameObject stonePrefab;
+    public GameObject rockPrefab;
     private List<GameObject> bunchOfFloatingStones;
     public int rockAmount = 5;
 
@@ -12,15 +12,13 @@ public class EarthTower : Tower {
 
     //private float attackTimer;
     private float stoneTimer = 0;
-    private float stoneMaxSize = 1.0f;
+    private float stoneMaxSize = 8.0f;
 
     private bool isInitiated = false;
 
     private Vector3 scaleTo;
 
 	void Start () {
-        isUpgradable = true;
-
         if (!isInitiated)
             SetupTower();
     }
@@ -37,14 +35,14 @@ public class EarthTower : Tower {
         rotaryCenter = transform.FindChild("Center");
 
         float angleSpacing = (Mathf.PI * 2) / rockAmount;
-        float radius = 0.3f;
+        float radius = 1.4f;
         for (int i = 0; i < rockAmount; i++)
         {
             float posX = Mathf.Sin(i * angleSpacing) * radius;
             float posZ = Mathf.Cos(i * angleSpacing) * radius;
 
             Vector3 newPos = new Vector3(posX, 0, posZ);
-            GameObject stone = Instantiate(stonePrefab, newPos, Quaternion.identity) as GameObject;
+            GameObject stone = Instantiate(rockPrefab, newPos, Quaternion.identity) as GameObject;
             stone.transform.parent = rotaryCenter.transform;
             stone.transform.localPosition = newPos;
             //stone.transform.localRotation = Quaternion.Euler(Random.Range(-45, 45), Random.Range(-45, 45), Random.Range(-45, 45));
@@ -67,9 +65,9 @@ public class EarthTower : Tower {
         {
             if(stone.transform.localScale.x < stoneMaxSize)
             {
-                scaleTo.x = Time.deltaTime;
-                scaleTo.y = Time.deltaTime;
-                scaleTo.z = Time.deltaTime;
+                scaleTo.x = Time.deltaTime * 10;
+                scaleTo.y = Time.deltaTime * 10;
+                scaleTo.z = Time.deltaTime * 10;
                 stone.transform.localScale += scaleTo;
                 stone.transform.Rotate(new Vector3(Time.deltaTime * 300, 0, 0));
             }

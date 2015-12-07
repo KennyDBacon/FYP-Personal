@@ -8,7 +8,6 @@ public class FireTower : Tower {
     void Start()
     {
         isRotating = true;
-        isUpgradable = true;
     }
 
 	void Update () {
@@ -21,6 +20,7 @@ public class FireTower : Tower {
             if(attackTimer >= unit.attackInterval)
             {
                 attackTimer = 0;
+                Debug.Log(fireParticle.GetComponent<Flamethrower>().GetEnemyList.Count);
                 foreach(Unit enemy in fireParticle.GetComponent<Flamethrower>().GetEnemyList)
                 {
                     enemy.health -= unit.damage;

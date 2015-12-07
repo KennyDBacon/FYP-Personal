@@ -5,7 +5,7 @@ public class BasicTower : Tower {
 
     void Start()
     {
-        isReplacable = true;
+
     }
 
     void Update()

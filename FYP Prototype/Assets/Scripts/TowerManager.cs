@@ -16,10 +16,6 @@ public class TowerManager : MonoBehaviour {
     private int towerIndex = 0;
     private bool isNext = false;
 
-    private bool onUpMenu = false;
-    private Vector3 uiPos;
-    private Transform selectedTower;
-
 	void Start () {
         //playerCam = GameObject.FindGameObjectWithTag("Player").GetComponent<CameraControl>();
         //upperCamera = GameObject.FindGameObjectWithTag("SubCamera").GetComponent<Camera>();
@@ -28,28 +24,6 @@ public class TowerManager : MonoBehaviour {
 	void Update () {
 	    if(playerCam.UpperCam.activeSelf)
         {
-            if (Input.GetKeyDown(KeyCode.Mouse0))
-            {
-                Ray ray = upperCamera.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit))
-                {
-                    if (hit.collider.tag == "Tower")
-                    {
-                        if (hit.collider.GetComponent<BoxCollider>() != null)
-                        {
-                            onUpMenu = true;
-                            selectedTower = hit.transform;
-                        }
-                    }
-                }
-            }
-
-            if (onUpMenu)
-            {
-                uiPos = upperCamera.WorldToScreenPoint(selectedTower.position);
-            }
-
             if (Input.GetKeyDown(KeyCode.B))
             {
                 isBuildMode = !isBuildMode;
@@ -142,26 +116,4 @@ public class TowerManager : MonoBehaviour {
             }
         }
 	}
-
-    void OnGUI()
-    {
-        if (onUpMenu)
-        {
-            if (selectedTower.GetComponent<Tower>().isReplacable)
-            {
-                if (GUI.Button(new Rect(uiPos.x + 10, Screen.height - uiPos.y - 90, 100, 40), "Fire"))
-                {
-                    Debug.Log("Upgrade to Fire Tower");
-                }
-
-                GUI.Button(new Rect(uiPos.x + 10, Screen.height - uiPos.y - 45, 100, 40), "Water");
-                GUI.Button(new Rect(uiPos.x + 10, Screen.height - uiPos.y, 100, 40), "Earth");
-                GUI.Button(new Rect(uiPos.x + 10, Screen.height - uiPos.y + 45, 100, 40), "Lightning");
-            }
-            else if (selectedTower.GetComponent<Tower>().isUpgradable)
-            {
-                GUI.Button(new Rect(uiPos.x + 10, Screen.height - uiPos.y - 20, 100, 40), "Upgrade");
-            }
-        }
-    }
 }

@@ -3,14 +3,7 @@ using System.Collections;
 
 public class LightningTower : Tower {
 
-    public GameObject lightningPrefab;
-
-    public float attackTimer;
-
-    void Start()
-    {
-        isUpgradable = true;
-    }
+    public GameObject lightningChain;
 
     void Update () {
         if (target != null)
@@ -20,16 +13,15 @@ public class LightningTower : Tower {
             if (attackTimer >= 5.0f)
             {
                 attackTimer = 0.0f;
-                if (target.GetComponent<LightningHit>() == null)
+                if (target.GetComponent<LightningHit>() == null && target.tag == "Enemy")
                 {
-                    GameObject go = Instantiate(lightningPrefab, transform.position, Quaternion.identity) as GameObject;
-                    go.GetComponent<LightningChain>().Damage = unit.damage;
+                    GameObject chain = Instantiate(lightningChain, target.transform.position, Quaternion.identity) as GameObject;
+                    chain.GetComponent<LightningChain>().targetGO = target.gameObject;
+                    chain.GetComponent<LightningChain>().damage = unit.damage;
 
-                    target.gameObject.AddComponent<LightningHit>().lightningChain = go.GetComponent<LightningChain>();
+                    target.gameObject.AddComponent<LightningHit>();
                 }
             }
-
-            //unit.Attack(target);
         }
 	}
 }

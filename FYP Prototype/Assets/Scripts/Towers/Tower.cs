@@ -13,11 +13,6 @@ public class Tower : MonoBehaviour {
     public bool isDamaging = true;
     protected float attackTimer;
 
-    // For basic tower when being replaced by elemental tower
-    public Boolean isReplacable = false;
-    // For Elemental tower
-    public Boolean isUpgradable = false;
-
     void Awake ()
     {
         unit = GetComponent<Unit>();
@@ -71,11 +66,11 @@ public class Tower : MonoBehaviour {
 
     void FindTarget (Collider col)
     {
-        if (target == null && !col.isTrigger)
+        if (target == null && col.transform.root.GetComponent<Unit>() != null)
         {
-            if (col.GetComponent<Unit>() != null && !col.GetComponent<Unit>().isAllyTeam)
+            if (!col.transform.root.GetComponent<Unit>().isAllyTeam)
             {
-                target = col.GetComponent<Unit>();
+                target = col.transform.root.GetComponent<Unit>();
             }
         }
     }

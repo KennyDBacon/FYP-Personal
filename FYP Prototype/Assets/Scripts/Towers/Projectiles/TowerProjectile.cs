@@ -22,7 +22,7 @@ public class TowerProjectile : MonoBehaviour
 
     void OnTriggerEnter (Collider col)
     {
-        if (!col.isTrigger && col.GetComponent<Unit>() != null && !col.GetComponent<Unit>().isAllyTeam && target != null)
+        if (!col.isTrigger && col.transform.root.GetComponent<Unit>() != null && !col.transform.root.GetComponent<Unit>().isAllyTeam && target != null)
         {
             target.health -= damage;
             if (target.health <= 0)

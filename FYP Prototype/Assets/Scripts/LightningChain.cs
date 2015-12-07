@@ -1,117 +1,89 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
 public class LightningChain : MonoBehaviour {
-    
-    private List<Enemy> chainedEnemy;
-    private int damage;
 
-    private int targetAmount;
-    private int maxTarget = 5;
+    public GameObject targetGO;
+    public int damage;
 
-    private float chainTimer = 0.8f;
-    private float totalLifetime;
+    public int hitCount = 5;
 
-    void Start () {
-        chainedEnemy = new List<Enemy>();
+    private bool newChain = true;
+    private SphereCollider collider;
 
-        totalLifetime = maxTarget * chainTimer;
+	void Start () {
+        collider = this.GetComponent<SphereCollider>();
 	}
-
-    void Update()
-    {
-        totalLifetime -= Time.deltaTime;
-
-        checkEndChain();
-
-        foreach(Enemy enemy in chainedEnemy)
+	
+	void Update () {
+        if (newChain)
         {
-            Debug.DrawLine(transform.position, enemy.transform.position);
-        }
-    }
+            targetGO.transform.root.GetComponent<Unit>().health -= damage;
 
-    public bool checkRestruck(Collider col)
-    {
-        bool test = false;
-        foreach(Enemy enemy in chainedEnemy)
-        {
-            if(col.gameObject.GetComponent<Enemy>() == enemy)
+            if (targetGO.transform.root.GetComponent<Unit>().health <= 0)
             {
-                test = true;
-                return true;
+                Destroy(targetGO);
+                Destroy(this.gameObject);
             }
 
-            Debug.Log("Tagged: " + test);
-            test = false;
-        }
-        
-        return false;
-    }
+            Debug.Log(targetGO.transform.position);
+            hitCount--;
 
-    public void action(Collider col)
-    {
-        targetAmount++;
-
-        //col.gameObject.GetComponent<Unit>().health -= damage;
-        if (col.gameObject.GetComponent<Unit>().health > 0)
-        {
-            //ChainedEnemy.Add(col.gameObject.GetComponent<Enemy>());
-            col.gameObject.AddComponent<LightningHit>().lightningChain = this;
-        }
-        else
-        {
-            Destroy(col.gameObject);
-        }
-    }
-
-    public void checkEndChain()
-    {
-        if(totalLifetime < 0 || targetAmount >= maxTarget)
-        {
-            Debug.Log(chainedEnemy.Count);
-            foreach(Enemy enemy in ChainedEnemy)
+            if (hitCount <= 0)
             {
-                if(enemy != null)
+                if (this.gameObject != null)
                 {
-                    // Remove the sphere collider then the script
-                    if (enemy.GetComponent<LightningHit>() != null)
-                    {
-                        //enemy.GetComponent<LightningHit>().removeAttachment();
-                        Destroy(enemy.gameObject.GetComponent<LightningHit>());
-                    }
+                    Destroy(this.gameObject);
                 }
             }
-            
-            Destroy(this.gameObject);
+
+            collider.radius = 0.2f;
+            newChain = false;
+        }
+
+        collider.radius += Time.deltaTime;
+        this.transform.position = targetGO.transform.position;
+	}
+
+    void OnTriggerEnter(Collider col)
+    {
+        if (col.transform.root.GetComponent<Unit>() != null)
+        {
+            if (!col.transform.root.GetComponent<Unit>().isAllyTeam)
+            {
+                if (col.gameObject.GetComponent<LightningHit>() == null && col.tag == "Enemy")
+                {
+                    HitEnemy(col);
+                }
+            }
         }
     }
 
-    // Get methods
-
-    public List<Enemy> ChainedEnemy
+    void OnTriggerStay(Collider col)
     {
-        get { return chainedEnemy; }
-        set { chainedEnemy = value; }
+        if (col.transform.root.GetComponent<Unit>() != null)
+        {
+            if (!col.transform.root.GetComponent<Unit>().isAllyTeam)
+            {
+                if (col.gameObject.GetComponent<LightningHit>() == null && col.tag == "Enemy")
+                {
+                    HitEnemy(col);
+                }
+            }
+        }
     }
 
-    public int Damage
+    void HitEnemy(Collider col)
     {
-        set { damage = value; }
+        newChain = true;
+
+        targetGO = col.gameObject;
+
+        col.gameObject.AddComponent<LightningHit>();
     }
 
-    public int TargetAmount
+    void OnDrawGizmos()
     {
-        get { return targetAmount; }
-    }
-
-    public int MaxTarget
-    {
-        get { return maxTarget; }
-    }
-
-    public float ChainTimer
-    {
-        get { return chainTimer; }
+        Gizmos.DrawSphere(this.gameObject.transform.position, collider.radius);
     }
 }

@@ -10,23 +10,23 @@ public class Flamethrower : MonoBehaviour {
 	}
 	
 	void Update () {
-	    for(int i = 0; i < enemyHit.Count - 1; --i)
-        {
-            enemyHit.RemoveAt(i);
-        }
+        //for(int i = 0; i < enemyHit.Count - 1; --i)
+        //{
+        //    enemyHit.RemoveAt(i);
+        //}
 	}
 
     void OnTriggerEnter(Collider col)
     {
-        if (col.gameObject.GetComponent<Enemy>() != null)
+        if (col.transform.root.gameObject.GetComponent<Enemy>() != null)
         {
-            enemyHit.Add(col.gameObject.GetComponent<Unit>());
+            enemyHit.Add(col.gameObject.transform.root.GetComponent<Unit>());
         }
     }
 
     void OnTriggerExit(Collider col)
     {
-        enemyHit.Remove(col.gameObject.GetComponent<Unit>());
+        enemyHit.Remove(col.gameObject.transform.root.GetComponent<Unit>());
     }
 
     public List<Unit> GetEnemyList
