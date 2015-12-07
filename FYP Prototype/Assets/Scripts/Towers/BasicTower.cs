@@ -3,17 +3,12 @@ using System.Collections;
 
 public class BasicTower : Tower {
 
-    void Start()
-    {
-
-    }
-
     void Update()
     {
+        TowerAction();
+
         if (target != null)
         {
-            TowerAction();
-
             // Temporary to make the tower spawn projectile
             if (attackTimer >= unit.attackInterval)
             {

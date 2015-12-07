@@ -4,11 +4,11 @@ using System;
 
 public class Tower : MonoBehaviour {
 
-    public Transform turret;
-    public Boolean isRotating = false;
+    //public Boolean isRotating = false;
 
     protected Unit target = null;
     protected Unit unit;
+    protected SphereCollider sphereCol;
 
     public bool isDamaging = true;
     protected float attackTimer;
@@ -16,6 +16,7 @@ public class Tower : MonoBehaviour {
     void Awake ()
     {
         unit = GetComponent<Unit>();
+        sphereCol = GetComponent<SphereCollider>();
 
         attackTimer = unit.attackInterval;
     }
@@ -30,39 +31,51 @@ public class Tower : MonoBehaviour {
 
     protected void TowerAction()
     {
-        if(isRotating && turret != null)
-        {
-            //RotateTurret();
-            turret.LookAt(target.gameObject.transform);
-        }
+        //if(isRotating && turret != null)
+        //{
+        //    //RotateTurret();
+        //}
 
-        if (isDamaging)
+        if (target != null)
         {
-            attackTimer += Time.deltaTime;
-
-            if (attackTimer >= unit.attackInterval)
+            if (isDamaging)
             {
-                //unit.projectile.GetComponent<TowerProjectile>().damage = unit.damage;
+                attackTimer += Time.deltaTime;
             }
-            //unit.Attack();
+        }
+        else
+        {
+            sphereCol.radius = 0.1f;
+            sphereCol.radius = 6.0f;
         }
     }
 
     void OnTriggerEnter (Collider col)
     {
-        FindTarget(col);
+        if (col.tag == "Enemy")
+        {
+            FindTarget(col);
+        }
     }
 
-    void OnTriggerStay (Collider col)
+    void OnTriggerStay(Collider col)
     {
-        FindTarget(col);
+        if (col.tag == "Enemy")
+        {
+            Debug.Log("Stay");
+            FindTarget(col);
+        }
     }
 
     void OnTriggerExit (Collider col)
     {
-        if (target != null && !col.isTrigger && col.gameObject == target.gameObject)
+        if (col.tag == "Enemy")
         {
-            target = null;
+            Debug.Log("Exit");
+            if (target != null && !col.isTrigger && col.gameObject == target.gameObject)
+            {
+                target = null;
+            }
         }
     }
 
@@ -81,20 +94,5 @@ public class Tower : MonoBehaviour {
                 target = col.transform.root.GetComponent<Unit>();
             }
         }
-    }
-
-    // Special function
-
-    // Rotate the turret along Y-axis, so the tower doesn't look down toward the target
-    protected void RotateTurret()
-    {
-        //Vector3 rot = new Vector3(target.transform.position.x,
-        //                          turret.transform.position.y,
-        //                          target.transform.position.z);
-
-        Vector3 rot = target.transform.position - turret.transform.position;
-        //rot.y = 0;
-        Quaternion lookDir = Quaternion.LookRotation(rot);
-        turret.transform.rotation = Quaternion.Slerp(turret.transform.rotation, lookDir, Time.deltaTime * 4);
     }
 }
