@@ -51,8 +51,10 @@
      <Compile Include="Assets\Scripts\Enemy\Enemy.cs" />
      <Compile Include="Assets\Scripts\Enemy\Hunter.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
+     <Compile Include="Assets\Scripts\KennyDemo\firetowerdemo.cs" />
+     <Compile Include="Assets\Scripts\KennyDemo\towerDemoCamera.cs" />
+     <Compile Include="Assets\Scripts\KennyDemo\towerDemoMovement.cs" />
      <Compile Include="Assets\Scripts\LightningChain.cs" />
-     <Compile Include="Assets\Scripts\LightningHit.cs" />
      <Compile Include="Assets\Scripts\SpawnPoint.cs" />
      <Compile Include="Assets\Scripts\TowerManager.cs" />
      <Compile Include="Assets\Scripts\Towers\BasicTower.cs" />

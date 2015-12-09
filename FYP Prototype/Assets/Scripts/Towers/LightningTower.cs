@@ -5,21 +5,30 @@ public class LightningTower : Tower {
 
     public GameObject lightningChain;
 
+    private ArrayList targets;
+
     void Update () {
         if (target != null)
         {
-            attackTimer += Time.deltaTime;
+            TowerAction();
 
-            if (attackTimer >= 5.0f)
+            if (attackTimer >= unit.attackInterval)
             {
-                attackTimer = 0.0f;
-                if (target.GetComponent<LightningHit>() == null && target.tag == "Enemy")
+                attackTimer = 0;
+
+                // Damage the target and check if alive
+                target.health -= unit.damage;
+                CheckTargetAlive();
+
+                if (target != null)
                 {
                     GameObject chain = Instantiate(lightningChain, target.transform.position, Quaternion.identity) as GameObject;
-                    chain.GetComponent<LightningChain>().targetGO = target.gameObject;
-                    chain.GetComponent<LightningChain>().damage = unit.damage;
 
-                    target.gameObject.AddComponent<LightningHit>();
+                    // Set first target
+                    chain.GetComponent<LightningChain>().currentTarget = target.gameObject;
+
+                    // Set the damage of the lightning chain
+                    chain.GetComponent<LightningChain>().damage = unit.damage;
                 }
             }
         }

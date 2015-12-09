@@ -43,11 +43,6 @@ public class Tower : MonoBehaviour {
                 attackTimer += Time.deltaTime;
             }
         }
-        else
-        {
-            sphereCol.radius = 0.1f;
-            sphereCol.radius = 6.0f;
-        }
     }
 
     void OnTriggerEnter (Collider col)
@@ -60,18 +55,16 @@ public class Tower : MonoBehaviour {
 
     void OnTriggerStay(Collider col)
     {
-        if (col.tag == "Enemy")
+        if (col.transform.root.tag == "Enemy")
         {
-            Debug.Log("Stay");
             FindTarget(col);
         }
     }
 
     void OnTriggerExit (Collider col)
     {
-        if (col.tag == "Enemy")
+        if (col.transform.root.tag == "Enemy")
         {
-            Debug.Log("Exit");
             if (target != null && !col.isTrigger && col.gameObject == target.gameObject)
             {
                 target = null;
@@ -93,6 +86,16 @@ public class Tower : MonoBehaviour {
             {
                 target = col.transform.root.GetComponent<Unit>();
             }
+        }
+    }
+
+    protected void CheckTargetAlive()
+    {
+        if (target.health <= 0)
+        {
+            Destroy(target.gameObject);
+
+            target = null;
         }
     }
 }
