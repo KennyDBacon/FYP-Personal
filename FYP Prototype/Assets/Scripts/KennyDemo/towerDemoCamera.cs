@@ -9,11 +9,11 @@ public class towerDemoCamera : MonoBehaviour {
 	void Start () {
         locations = new Vector3[5];
 
-        locations[0] = new Vector3(-72, 9.5f, 17);
-        locations[1] = new Vector3(-43, 9.9f, 14.8f);
-        locations[2] = new Vector3(-13.9f, 6.8f, 6.4f);
-        locations[3] = new Vector3(22.4f, 7.3f, 8.9f);
-        locations[4] = new Vector3(45.4f, 6.5f, 13.9f);
+        locations[0] = new Vector3(-72, 7, 11);
+        locations[1] = new Vector3(-42, 7, 11);
+        locations[2] = new Vector3(-14, 5, 4.4f);
+        locations[3] = new Vector3(23.5f, 5.8f, 7.9f);
+        locations[4] = new Vector3(44.6f, 4.5f, 8.4f);
 
         this.gameObject.transform.position = locations[0];
 	}

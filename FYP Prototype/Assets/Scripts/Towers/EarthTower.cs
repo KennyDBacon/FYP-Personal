@@ -57,23 +57,11 @@ public class EarthTower : Tower {
         isInitiated = true;
     }
 
-    void Update () {
+    void Update()
+    {
+        AnimationControl();
+        TowerAction();
 
-        rotaryCenter.Rotate(new Vector3(0, 45 * Time.deltaTime, 0));
-
-        foreach(GameObject stone in bunchOfFloatingStones)
-        {
-            if(stone.transform.localScale.x < stoneMaxSize)
-            {
-                scaleTo.x = Time.deltaTime * 10;
-                scaleTo.y = Time.deltaTime * 10;
-                scaleTo.z = Time.deltaTime * 10;
-                stone.transform.localScale += scaleTo;
-                stone.transform.Rotate(new Vector3(Time.deltaTime * 300, 0, 0));
-            }
-        }
-
-        attackTimer += Time.deltaTime;
         if (target != null)
         {
             if (attackTimer >= unit.attackInterval)
@@ -84,6 +72,23 @@ public class EarthTower : Tower {
         }
 	}
 
+    void AnimationControl()
+    {
+        rotaryCenter.Rotate(new Vector3(0, 45 * Time.deltaTime, 0));
+
+        foreach (GameObject stone in bunchOfFloatingStones)
+        {
+            if (stone.transform.localScale.x < stoneMaxSize)
+            {
+                scaleTo.x = Time.deltaTime * 10;
+                scaleTo.y = Time.deltaTime * 10;
+                scaleTo.z = Time.deltaTime * 10;
+                stone.transform.localScale += scaleTo;
+                stone.transform.Rotate(new Vector3(Time.deltaTime * 300, 0, 0));
+            }
+        }
+    }
+
     void FireAtTarget()
     {
         int index = Random.Range(0, bunchOfFloatingStones.Count);
@@ -91,6 +96,6 @@ public class EarthTower : Tower {
         GameObject flyingStone = Instantiate(unit.projectile, bunchOfFloatingStones[index].transform.position, Quaternion.identity) as GameObject;
         flyingStone.transform.rotation = bunchOfFloatingStones[index].transform.rotation;
         flyingStone.GetComponent<TowerProjectile>().target = target;
-        //flyingStone.GetComponent<TowerProjectile>().damage = unit.damage;
+        flyingStone.GetComponent<TowerProjectile>().damage = unit.damage;
     }
 }

@@ -11,7 +11,7 @@ public class TowerProjectile : MonoBehaviour
     {
         if (target != null)
         {
-            gameObject.transform.LookAt(target.gameObject.transform);
+            gameObject.transform.LookAt(target.gameObject.transform.position + target.gameObject.GetComponent<CapsuleCollider>().center);
             transform.position += speed * transform.forward * Time.deltaTime;
         }
         else

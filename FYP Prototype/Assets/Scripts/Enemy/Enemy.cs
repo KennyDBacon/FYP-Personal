@@ -33,11 +33,20 @@ public class Enemy : Unit
         shuffleRight = Random.Range(0, 2) == 1;
 	}
 
+
+    //PLEASE REMOVE ME KEVIN
+    void OnDestroy ()
+    {
+        --GameManager.manager.enemyCount;
+        GameManager.manager.AddShards(cost);
+    }
+    ////////
+
     protected virtual void Start()
     {
         if (target == null)
         {
-            target = GameManager.endPoint;
+            target = GameManager.manager.endPoint;
         }
         navMeshAgent.SetDestination(target.gameObject.transform.position);
     }
@@ -72,18 +81,18 @@ public class Enemy : Unit
     {
         if (!col.isTrigger)
         {
-            if (aiState != AIState.Attack)
+            if (col.CompareTag("EndPoint") && target == GameManager.manager.endPoint)
             {
-                if (col.tag == "EndPoint" && target == GameManager.endPoint)
+                if (aiState != AIState.Attack)
                 {
                     SetState(AIState.Attack);
                 }
-            }
-            if (aiState == AIState.Attack)
-            {
-                shuffleTime = Random.Range(-0.2f, 1.5f);
-                isStopped = true;
-                navMeshAgent.Stop();
+                if (aiState == AIState.Attack)
+                {
+                    shuffleTime = Random.Range(-0.2f, 1.5f);
+                    isStopped = true;
+                    navMeshAgent.Stop();
+                }
             }
         }
     }
@@ -109,7 +118,7 @@ public class Enemy : Unit
 
     protected virtual void ResetUnitAggro ()
     {
-        target = GameManager.endPoint;
+        target = GameManager.manager.endPoint;
         SetState(AIState.Walk);
         shuffleTimer = 0.0f;
     }
@@ -158,21 +167,19 @@ public class Enemy : Unit
     {
         if (health <= 0)
         {
-            animator.SetBool("Die", true);
+            animator.SetTrigger("Die");
+            navMeshAgent.Stop();
+            GameManager.manager.AddShards(cost);
+            GameManager.manager.enemyCount--;
         }
         else
         {
-            animator.SetBool("Take Damage", true);
+            animator.SetTrigger("Take Damage");
         }
     }
 
 
     //End-of-animation cue
-    void EndOfTakeDamage()
-    {
-        animator.SetBool("Take Damage", false);
-    }
-
     void EndOfDie()
     {
         Destroy(gameObject);

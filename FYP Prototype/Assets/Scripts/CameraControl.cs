@@ -3,76 +3,62 @@ using System.Collections;
 
 public class CameraControl : MonoBehaviour
 {
-    //FPS Camera
-    private GameObject playerCam;
-
-    //Topdown Camera
-    private GameObject upperCam;
-    private Vector3 upperCamDefaultPos;
+    private Vector3 upperCamDefaultPos = new Vector3(-0.5f, 50.0f, -0.5f);
     private Vector3 moveToPos;
-    private float maxDeviation = (50 - 15) * (-3.0f/6.0f) + 25;
+    private Vector2 maxDeviation;
 
-    void Start()
+    void Awake ()
     {
-        playerCam = Camera.main.gameObject;
-
-        upperCam = GameObject.FindGameObjectWithTag("SubCamera");
-        upperCamDefaultPos = new Vector3(30, 50, 30);
         moveToPos = upperCamDefaultPos;
-        upperCam.SetActive(false);
+        CalculateMaxDeviation(50.0f);
+    }
+    
+    void OnEnable ()
+    {
+        transform.position = upperCamDefaultPos;
+        moveToPos = upperCamDefaultPos;
+        CalculateMaxDeviation(50.0f);
     }
 
-    void Update()
+    void Update ()
     {
-        if (Input.GetKeyDown(KeyCode.G))
+        if (Input.mouseScrollDelta.y != 0.0f)
         {
-            playerCam.SetActive(!playerCam.activeSelf);
-            upperCam.SetActive(!upperCam.activeSelf);
-            if (upperCam.activeSelf)
+            moveToPos.y -= Input.mouseScrollDelta.y;
+            if (moveToPos.y > 50.0f)
             {
-                upperCam.transform.position = upperCamDefaultPos;
-                moveToPos = upperCamDefaultPos;
+                moveToPos.y = 50.0f;
             }
+            else if (moveToPos.y < 15.0f)
+            {
+                moveToPos.y = 15.0f;
+            }
+            CalculateMaxDeviation(moveToPos.y);
         }
-        if (upperCam.activeSelf)
+        moveToPos.x += Time.deltaTime * 25.0f * (1.0f/Time.timeScale) * (int)(Input.mousePosition.x / (Screen.width - 1) * 2 - 1);
+        moveToPos.z += Time.deltaTime * 25.0f * (1.0f/Time.timeScale) * (int)(Input.mousePosition.y / (Screen.height - 1) * 2 - 1);
+        if (moveToPos.x > upperCamDefaultPos.x + maxDeviation.x)
         {
-            if (Input.mouseScrollDelta.y != 0.0f)
-            {
-                moveToPos.y -= Input.mouseScrollDelta.y;
-                if (moveToPos.y > 50.0f)
-                {
-                    moveToPos.y = 50.0f;
-                }
-                else if (moveToPos.y < 15.0f) 
-                {
-                    moveToPos.y = 15.0f;
-                }
-                maxDeviation = (moveToPos.y - 15) * (-3.0f/6.0f) + 25;
-            }
-            moveToPos.x += Time.deltaTime * 25.0f * (int)(Input.mousePosition.x / Screen.width * 2 - 1);
-            moveToPos.z += Time.deltaTime * 25.0f * (int)(Input.mousePosition.y / Screen.height * 2 - 1);
-            if (moveToPos.x > 30 + maxDeviation)
-            {
-                moveToPos.x = 30 + maxDeviation;
-            }
-            else if (moveToPos.x < 30 - maxDeviation)
-            {
-                moveToPos.x = 30 - maxDeviation;
-            }
-            if (moveToPos.z > 30 + maxDeviation)
-            {
-                moveToPos.z = 30 + maxDeviation;
-            }
-            else if (moveToPos.z < 30 - maxDeviation)
-            {
-                moveToPos.z = 30 - maxDeviation;
-            }
-            upperCam.transform.position = Vector3.Lerp(upperCam.transform.position, moveToPos, Time.deltaTime * 10.0f);
+            moveToPos.x = upperCamDefaultPos.x + maxDeviation.x;
         }
+        else if (moveToPos.x < upperCamDefaultPos.x - maxDeviation.x)
+        {
+            moveToPos.x = upperCamDefaultPos.x - maxDeviation.x;
+        }
+        if (moveToPos.z > upperCamDefaultPos.z + maxDeviation.y)
+        {
+            moveToPos.z = upperCamDefaultPos.z + maxDeviation.y;
+        }
+        else if (moveToPos.z < upperCamDefaultPos.z - maxDeviation.y)
+        {
+            moveToPos.z = upperCamDefaultPos.z - maxDeviation.y;
+        }
+        transform.position = Vector3.Lerp(transform.position, moveToPos, Time.deltaTime * 10.0f * (1.0f / Time.timeScale));
     }
 
-    public GameObject UpperCam
+    private void CalculateMaxDeviation (float camHeight)
     {
-        get { return upperCam; }
+        maxDeviation.x = (camHeight - 83.48f) * (-23.0f / 35.0f);
+        maxDeviation.y = (camHeight - 82.375f) * (-20.0f / 35.0f);
     }
 }

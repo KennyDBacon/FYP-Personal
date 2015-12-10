@@ -5,22 +5,22 @@ public class Hunter : Enemy
 {
     protected override void Start()
     {
-	    if (GameManager.player.gameObject.activeSelf)
+	    if (GameManager.manager.player.gameObject.activeSelf)
         {
-            target = GameManager.player;
+            target = GameManager.manager.player;
         }
         base.Start();
 	}
 	
 	protected override void Update () 
     {
-	    if (GameManager.player.gameObject.activeSelf)
+        if (GameManager.manager.player.gameObject.activeSelf)
         {
-            if (target != GameManager.player)
+            if (target != GameManager.manager.player)
             {
                 ResetUnitAggro();
             }
-            if (target == GameManager.player)
+            if (target == GameManager.manager.player)
             {
                 if (aiState != AIState.Attack && Vector3.Distance(target.gameObject.transform.position, navMeshAgent.destination) > 0.6f)
                 {
@@ -28,7 +28,7 @@ public class Hunter : Enemy
                 }
             }
         }
-        else if (target != GameManager.endPoint)
+        else if (target != GameManager.manager.endPoint)
         {
             ResetUnitAggro();
             navMeshAgent.SetDestination(target.transform.position);
@@ -40,7 +40,7 @@ public class Hunter : Enemy
     {
         if (!col.isTrigger && aiState != AIState.Attack)
         {
-            if (col.tag == "Player")
+            if (col.CompareTag("Player"))
             {
                 SetState(AIState.Attack);
             }
@@ -51,15 +51,15 @@ public class Hunter : Enemy
     protected override void ResetUnitAggro()
     {
         base.ResetUnitAggro();
-        if (GameManager.player.gameObject.activeSelf)
+        if (GameManager.manager.player.gameObject.activeSelf)
         {
-            target = GameManager.player;
+            target = GameManager.manager.player;
         }
     }
 
     protected override void Shuffle()
     {
-        if(target.tag == "Player")
+        if(target.CompareTag("Player"))
         {
             if (shuffleTimer <= shuffleTime)
             {

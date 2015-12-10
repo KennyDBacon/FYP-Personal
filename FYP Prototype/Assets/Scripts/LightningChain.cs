@@ -94,7 +94,7 @@ public class LightningChain : MonoBehaviour {
     void HitEnemy(Collider col)
     {
         bool isTagged = false;
-
+        Debug.Log("Check");
         foreach (GameObject taggedTarget in targets)
         {
             if (col.transform.root.gameObject == taggedTarget)
