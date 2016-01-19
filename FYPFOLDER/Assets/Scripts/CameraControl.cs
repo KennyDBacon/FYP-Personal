@@ -35,25 +35,28 @@ public class CameraControl : MonoBehaviour
             }
             CalculateMaxDeviation(moveToPos.y);
         }
-        moveToPos.x += Time.deltaTime * 25.0f * (1.0f/Time.timeScale) * (int)(Input.mousePosition.x / (Screen.width - 1) * 2 - 1);
-        moveToPos.z += Time.deltaTime * 25.0f * (1.0f/Time.timeScale) * (int)(Input.mousePosition.y / (Screen.height - 1) * 2 - 1);
-        if (moveToPos.x > upperCamDefaultPos.x + maxDeviation.x)
+        if (Time.timeScale != 0.0f)
         {
-            moveToPos.x = upperCamDefaultPos.x + maxDeviation.x;
+            moveToPos.x += Time.deltaTime * 25.0f * (1.0f / Time.timeScale) * (int)(Input.mousePosition.x / (Screen.width - 1) * 2 - 1);
+            moveToPos.z += Time.deltaTime * 25.0f * (1.0f / Time.timeScale) * (int)(Input.mousePosition.y / (Screen.height - 1) * 2 - 1);
+            if (moveToPos.x > upperCamDefaultPos.x + maxDeviation.x)
+            {
+                moveToPos.x = upperCamDefaultPos.x + maxDeviation.x;
+            }
+            else if (moveToPos.x < upperCamDefaultPos.x - maxDeviation.x)
+            {
+                moveToPos.x = upperCamDefaultPos.x - maxDeviation.x;
+            }
+            if (moveToPos.z > upperCamDefaultPos.z + maxDeviation.y)
+            {
+                moveToPos.z = upperCamDefaultPos.z + maxDeviation.y;
+            }
+            else if (moveToPos.z < upperCamDefaultPos.z - maxDeviation.y)
+            {
+                moveToPos.z = upperCamDefaultPos.z - maxDeviation.y;
+            }
+            transform.position = Vector3.Lerp(transform.position, moveToPos, Time.deltaTime * 10.0f * (1.0f / Time.timeScale));
         }
-        else if (moveToPos.x < upperCamDefaultPos.x - maxDeviation.x)
-        {
-            moveToPos.x = upperCamDefaultPos.x - maxDeviation.x;
-        }
-        if (moveToPos.z > upperCamDefaultPos.z + maxDeviation.y)
-        {
-            moveToPos.z = upperCamDefaultPos.z + maxDeviation.y;
-        }
-        else if (moveToPos.z < upperCamDefaultPos.z - maxDeviation.y)
-        {
-            moveToPos.z = upperCamDefaultPos.z - maxDeviation.y;
-        }
-        transform.position = Vector3.Lerp(transform.position, moveToPos, Time.deltaTime * 10.0f * (1.0f / Time.timeScale));
     }
 
     private void CalculateMaxDeviation (float camHeight)

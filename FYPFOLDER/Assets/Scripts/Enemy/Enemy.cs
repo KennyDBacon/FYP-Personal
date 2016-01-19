@@ -116,7 +116,7 @@ public class Enemy : Unit
         }
     }
 
-    protected virtual void ResetUnitAggro ()
+    protected virtual void ResetUnitAggro()
     {
         target = GameManager.manager.endPoint;
         SetState(AIState.Walk);

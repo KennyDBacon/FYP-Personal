@@ -57,11 +57,23 @@ public class EarthTower : Tower {
         isInitiated = true;
     }
 
-    void Update()
-    {
-        AnimationControl();
-        TowerAction();
+    void Update () {
 
+        rotaryCenter.Rotate(new Vector3(0, 45 * Time.deltaTime, 0));
+
+        foreach(GameObject stone in bunchOfFloatingStones)
+        {
+            if(stone.transform.localScale.x < stoneMaxSize)
+            {
+                scaleTo.x = Time.deltaTime * 10;
+                scaleTo.y = Time.deltaTime * 10;
+                scaleTo.z = Time.deltaTime * 10;
+                stone.transform.localScale += scaleTo;
+                stone.transform.Rotate(new Vector3(Time.deltaTime * 300, 0, 0));
+            }
+        }
+
+        attackTimer += Time.deltaTime;
         if (target != null)
         {
             if (attackTimer >= unit.attackInterval)
@@ -71,23 +83,6 @@ public class EarthTower : Tower {
             }
         }
 	}
-
-    void AnimationControl()
-    {
-        rotaryCenter.Rotate(new Vector3(0, 45 * Time.deltaTime, 0));
-
-        foreach (GameObject stone in bunchOfFloatingStones)
-        {
-            if (stone.transform.localScale.x < stoneMaxSize)
-            {
-                scaleTo.x = Time.deltaTime * 10;
-                scaleTo.y = Time.deltaTime * 10;
-                scaleTo.z = Time.deltaTime * 10;
-                stone.transform.localScale += scaleTo;
-                stone.transform.Rotate(new Vector3(Time.deltaTime * 300, 0, 0));
-            }
-        }
-    }
 
     void FireAtTarget()
     {

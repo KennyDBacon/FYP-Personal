@@ -47,7 +47,7 @@ public class Tower : MonoBehaviour {
 
     void OnTriggerEnter (Collider col)
     {
-        if (col.tag == "Enemy")
+        if (col.tag == "Enemy" && !col.isTrigger)
         {
             FindTarget(col);
         }
@@ -55,7 +55,7 @@ public class Tower : MonoBehaviour {
 
     void OnTriggerStay(Collider col)
     {
-        if (col.transform.root.tag == "Enemy")
+        if (col.transform.root.tag == "Enemy" && !col.isTrigger)
         {
             FindTarget(col);
         }
